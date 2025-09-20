@@ -2,3 +2,8 @@ pandas
 numpy
 scikit-learn
 streamlit
+geopandas
+matplotlib
+seaborn
+beautifulsoup4
+schedule

@@ -91,15 +91,18 @@ def harita_uret():
 harita_uret()
 
 # 🖥️ Streamlit arayüzü
-url = "https://raw.githubusercontent.com/volkanceylan/turkiye-iller-ilceler-json/master/il-ilce.json"
-veri_json = requests.get(url).json()
-iller = [item['il'] for item in veri_json]
-ilceler_dict = {item['il']: item['ilceler'] for item in veri_json}
+# 🌍 Sabit il/ilçe verisi (JSON yerine)
+iller_ilceler = {
+    "İstanbul": ["Kadıköy", "Beşiktaş", "Üsküdar", "Şişli", "Ataşehir"],
+    "Ankara": ["Çankaya", "Keçiören", "Yenimahalle", "Mamak", "Etimesgut"],
+    "İzmir": ["Bornova", "Karşıyaka", "Konak", "Buca", "Bayraklı"]
+}
 
+# 🖥️ Streamlit arayüzü
 st.title("Üst Düzey Emlak Değerleme AI")
 
-il = st.selectbox("İl", iller)
-ilce = st.selectbox("İlçe", ilceler_dict[il])
+il = st.selectbox("İl", list(iller_ilceler.keys()))
+ilce = st.selectbox("İlçe", iller_ilceler[il])
 m2 = st.number_input("Metrekare", min_value=10)
 oda = st.number_input("Oda Sayısı", min_value=1)
 bina_yasi = st.number_input("Bina Yaşı", min_value=0)
@@ -113,5 +116,8 @@ if st.button("Tahmini Fiyatı Hesapla"):
     })
     tahmin = model.predict(girdi)[0]
     st.success(f"Tahmini Fiyat: {tahmin:,.0f} TL")
+
     st.subheader("İlçe Bazlı Ortalama Fiyat Haritası")
     st.image("fiyat_haritasi.png")
+
+
